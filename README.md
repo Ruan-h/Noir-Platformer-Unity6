@@ -6,9 +6,12 @@ Um jogo de plataforma 2D de ação tática e precisão, desenvolvido na Unity 6.
 
 ## 🎥 Gameplay
 
-> **Nota para o Desenvolvedor:** Para adicionar o vídeo aqui no GitHub, basta arrastar o seu arquivo `.mp4` ou `.gif` do seu computador e soltar diretamente dentro da caixa de texto de edição do GitHub. Ele vai gerar o link automaticamente e o vídeo vai rodar direto na página!
-> 
-
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=4Ib0IsFlLc0">
+    <img src="https://img.youtube.com/vi/4Ib0IsFlLc0/0.jpg" alt="Demonstração WaterDelivery" style="width:100%; max-width:600px;">
+  </a>
+  <p><i>Clique na imagem acima para assistir à demonstração no YouTube</i></p>
+</div>
 ---
 
 ## ⚔️ Filosofia de Combate
