@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
-    // --- MÁQUINA DE ESTADOS ---
     private enum State
     {
         Normal,
@@ -156,7 +155,6 @@ public class Controller : MonoBehaviour
         }
     }
 
-    // --- FUNÇÃO DE CHECAGEM COM CORREÇÃO DO OBSER ---
     private bool CheckBackstabAvailable()
     {
         Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPoint.position, attackSize, 0f, enemyLayer);
@@ -166,10 +164,8 @@ public class Controller : MonoBehaviour
             Enemy target = enemyCollider.GetComponent<Enemy>();
             if (target != null)
             {
-                // Regra 1: Tem que estar olhando para a mesma direção
                 if (this.isFacingRight == target.isFacingRight)
                 {
-                    // Regra 2: Não pode estar alerta, EXCETO se for o Obser
                     if (!target.IsAlert || target is Obser)
                     {
                         return true; 
@@ -179,7 +175,7 @@ public class Controller : MonoBehaviour
         }
         return false; 
     }
-    // ---------------------------------------------------
+
 
 
     private void HandleInputNormal()
@@ -244,8 +240,7 @@ public class Controller : MonoBehaviour
         if (rb.linearVelocity.y < 0) rb.gravityScale = originalGravity * fallGravityMultiplier;
         else rb.gravityScale = originalGravity;
     }
-    
-    // --- FUNÇÃO ATTACK: PRIORIDADE + FIX OBSER ---
+
     private bool Attack()
     {
          Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(attackPoint.position, attackSize, 0f, enemyLayer);
@@ -253,30 +248,26 @@ public class Controller : MonoBehaviour
          Enemy targetInFront = null;
          Enemy targetBehind = null;
 
-         // 1. VARREDURA E FILTRO
          foreach (Collider2D enemyCollider in hitEnemies)
          {
              Enemy target = enemyCollider.GetComponent<Enemy>();
 
              if (target != null)
              {
-                 // Regra 1: Mesmo lado (Costas)
+
                  if (this.isFacingRight == target.isFacingRight)
                  {
-                     // Regra 2: Alerta? (Com exceção para Obser)
+
                      if (!target.IsAlert || target is Obser)
                      {
-                         // Classifica: Frente ou Trás?
                          bool isFront = false;
 
                          if (isFacingRight)
                          {
-                             // Olhando p/ direita: X do inimigo > Meu X
                              if (target.transform.position.x > transform.position.x) isFront = true;
                          }
                          else
                          {
-                             // Olhando p/ esquerda: X do inimigo < Meu X
                              if (target.transform.position.x < transform.position.x) isFront = true;
                          }
 
@@ -287,12 +278,10 @@ public class Controller : MonoBehaviour
              }
          }
 
-         // 2. SELEÇÃO (Prioridade para Frente)
          Enemy finalTarget = null;
          if (targetInFront != null) finalTarget = targetInFront;
          else if (targetBehind != null) finalTarget = targetBehind;
 
-         // 3. EXECUÇÃO
          if (finalTarget != null)
          {
              Vector3 enemyPosition = finalTarget.transform.position;

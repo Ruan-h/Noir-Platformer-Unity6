@@ -4,10 +4,8 @@ using System;
 public class TargetedPatrol : MonoBehaviour
 {
     [Header("Patrol Route")]
-    [Tooltip("Pontos onde o inimigo vai andar.")]
     [SerializeField] private Transform[] waypoints;
 
-    [Tooltip("Opcional: Para cada Waypoint, defina um alvo para onde olhar ENQUANTO ESPERA. Se deixar vazio, ele mantém a direção.")]
     [SerializeField] private Transform[] lookTargets; 
 
     [Header("Settings")]
@@ -15,7 +13,6 @@ public class TargetedPatrol : MonoBehaviour
     [SerializeField] private float waitTime = 2f;
     [SerializeField] private float minDistance = 0.1f;
 
-    // Esta é a variável correta que devemos resetar
     private int currentIndex = 0; 
     private float waitTimer;
     private bool isWaiting;
@@ -24,7 +21,6 @@ public class TargetedPatrol : MonoBehaviour
     {
         if (waypoints.Length == 0) return;
 
-        // Garante que os arrays tenham tamanhos compatíveis para evitar erro
         bool hasLookTarget = lookTargets != null && 
                              lookTargets.Length > currentIndex && 
                              lookTargets[currentIndex] != null;
@@ -34,15 +30,12 @@ public class TargetedPatrol : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             waitTimer -= Time.deltaTime;
 
-            // --- LÓGICA ESPECIAL: OLHAR PARA O ALVO DURANTE A ESPERA ---
             if (hasLookTarget)
             {
                 Transform target = lookTargets[currentIndex];
                 
-                // 1. Onde o alvo está em relação a mim?
                 bool targetIsToTheRight = target.position.x > transform.position.x;
 
-                // 2. Verificação de Correção (Absolute Check)
                 if (targetIsToTheRight && !isFacingRight)
                 {
                     flipAction.Invoke();
@@ -52,7 +45,6 @@ public class TargetedPatrol : MonoBehaviour
                     flipAction.Invoke();
                 }
             }
-            // -----------------------------------------------------------
 
             if (waitTimer <= 0)
             {
@@ -62,7 +54,6 @@ public class TargetedPatrol : MonoBehaviour
         }
         else
         {
-            // Movimento Normal
             Transform destination = waypoints[currentIndex];
             float distance = Vector2.Distance(transform.position, destination.position);
 
@@ -83,16 +74,10 @@ public class TargetedPatrol : MonoBehaviour
         }
     }
     
-    // --- A CORREÇÃO ESTÁ AQUI ---
     public void ResetPatrol()
     {
-        // 1. Zera o índice usando o nome correto da variável
         currentIndex = 0; 
-
-        // 2. Zera o timer
         waitTimer = 0f;
-
-        // 3. Cancela o estado de espera para ele começar a andar imediatamente
         isWaiting = false;
     }
     

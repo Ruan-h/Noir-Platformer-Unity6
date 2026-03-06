@@ -47,10 +47,8 @@ public class Obser : Enemy, IEnemyVision
     [SerializeField] private AudioClip alertSound; 
     [SerializeField] private AudioClip laserSound; 
     
-    // --- NOVO: Slider de Volume para o Laser ---
     [Range(0f, 1f)] 
-    [SerializeField] private float laserVolume = 1.0f; // Padrão 100% (1.0)
-    // -------------------------------------------
+    [SerializeField] private float laserVolume = 1.0f;
 
     private ParticleSystem currentSparks; 
     private ParticleSystem currentImpactGlow;
@@ -206,9 +204,7 @@ public class Obser : Enemy, IEnemyVision
         {
             audioSource.pitch = Random.Range(0.9f, 1.1f);
             
-            // --- NOVO: Usa o volume configurado aqui ---
             audioSource.PlayOneShot(laserSound, laserVolume);
-            // -------------------------------------------
         }
 
         if (coreLaser != null)

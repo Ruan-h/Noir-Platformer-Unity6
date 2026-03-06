@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyPatrol))] 
-[RequireComponent(typeof(AudioSource))] // --- NOVO: Exige AudioSource ---
+[RequireComponent(typeof(AudioSource))]
 public class Anda : Enemy, IEnemyVision
 {
     public enum State { Patrolling, Chasing }
@@ -24,11 +24,10 @@ public class Anda : Enemy, IEnemyVision
     [Header("Initial Settings")]
     [SerializeField] private bool startFacingLeft = false; 
 
-    // --- NOVO: Configurações de Áudio ---
     [Header("Audio Settings")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip alertSound; // Som de "Te vi!"
-    // ------------------------------------
+    [SerializeField] private AudioClip alertSound;
+
 
     public float VisionRange => visionRange;    
     public float VisionAngle => visionAngle;        
@@ -47,7 +46,6 @@ public class Anda : Enemy, IEnemyVision
         rb = GetComponent<Rigidbody2D>();
         patrolComponent = GetComponent<EnemyPatrol>();
         
-        // --- NOVO: Pega o componente de áudio ---
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
     }
 
@@ -106,14 +104,11 @@ public class Anda : Enemy, IEnemyVision
 
         if (canSeePlayer)
         {
-            // Se ele NÃO estava perseguindo antes, e agora vai começar...
             if (currentState != State.Chasing)
             {
                 currentState = State.Chasing;
                 
-                // --- NOVO: TOCA O SOM DE ALERTA ---
                 PlayAlertSound();
-                // ----------------------------------
             }
             
             loseTargetTimer = timeToLoseTarget;
@@ -128,17 +123,15 @@ public class Anda : Enemy, IEnemyVision
         }
     }
 
-    // --- NOVO: Função auxiliar para tocar o som ---
     private void PlayAlertSound()
     {
         if (audioSource != null && alertSound != null)
         {
-            audioSource.pitch = 1.0f; // Reset do pitch para soar claro
+            audioSource.pitch = 1.0f;
             audioSource.PlayOneShot(alertSound);
         }
     }
-    // ----------------------------------------------
-
+    
     private void ExecuteChasingState()
     {
         if (playerTargetPoint == null) { currentState = State.Patrolling; return; }

@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     public void RestAtBench(Vector2 pos)
     {
         lastBenchPos = pos;
-        lastRoomEntryPos = pos; // O banco também serve como entrada de sala
+        lastRoomEntryPos = pos;
         hasBenchSaved = true;
         currentVinculos = maxVinculos;
     }
@@ -53,12 +53,10 @@ public class GameManager : MonoBehaviour
 		  playerController.ResetCharges();
         if (currentVinculos > 0)
         {
-            // --- SOFT RESPAWN ---
             currentVinculos--;
             
             playerController.transform.position = lastRoomEntryPos;
             
-            // Revive o player (destrava inputs)
             playerController.Revive();
 
             if (currentRoom != null)
@@ -68,8 +66,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // --- HARD RESPAWN ---
-            // Recarrega a cena. A mágica acontece no OnSceneLoaded.
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             currentVinculos = maxVinculos;
         }
@@ -82,10 +78,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    // --- HARD RESPAWN LÓGICA (SEM CORROTINA) ---
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 1. Reconecta referências
+
         Controller p = FindAnyObjectByType<Controller>();
         var vCam = FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
         
@@ -94,20 +90,19 @@ public class GameManager : MonoBehaviour
             vCam.Follow = p.transform;
         }
 
-        // 2. Se tivermos um banco salvo, forçamos a posição e a sala
+
         if (p != null && hasBenchSaved) 
         {
             p.transform.position = lastBenchPos;
 
-            // Busca todas as salas da cena
+
             RoomManager[] allRooms = FindObjectsByType<RoomManager>(FindObjectsSortMode.None);
             
             foreach (RoomManager room in allRooms)
             {
-                // Como o RoomManager usou Awake, 'cameraBounds' já está pronto para uso
+    
                 if (room.cameraBounds != null && room.cameraBounds.OverlapPoint(lastBenchPos))
                 {
-                    // Força a câmera para esta sala
                     room.OnPlayerEnterRoom(lastBenchPos);
                     currentRoom = room;
                     

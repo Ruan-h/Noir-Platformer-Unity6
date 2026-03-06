@@ -1,5 +1,5 @@
 using UnityEngine;
-using System; // Necessário para usar Action
+using System;
 
 public class EnemyPatrol : MonoBehaviour
 {
@@ -9,21 +9,18 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField] private float waitTime = 2f;
     [SerializeField] private float minDistance = 0.1f;
 
-    // Estado interno da patrulha
     private int currentWaypointIndex = 0;
     private float waitTimer;
     private bool isWaiting;
 
-    // Função pública chamada pelo "Cérebro" (Anda.cs)
-    // Recebe o Rigidbody para mover e uma função (Action) para flipar
+
     public void PatrolUpdate(Rigidbody2D rb, bool isFacingRight, Action flipCallback)
     {
         if (waypoints.Length == 0) return;
 
-        // Lógica de Espera
         if (isWaiting)
         {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); // Garante que parou
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             waitTimer -= Time.deltaTime;
             
             if (waitTimer <= 0)
@@ -34,24 +31,20 @@ public class EnemyPatrol : MonoBehaviour
             return;
         }
 
-        // Lógica de Movimento
         Transform targetPoint = waypoints[currentWaypointIndex];
         float distance = Vector2.Distance(transform.position, targetPoint.position);
 
         if (distance < minDistance)
         {
-            // Chegou no ponto
             isWaiting = true;
             waitTimer = waitTime;
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
         else
         {
-            // Move em direção ao ponto
             float direction = Mathf.Sign(targetPoint.position.x - transform.position.x);
             rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
 
-            // Verifica se precisa virar
             CheckFlip(targetPoint.position, isFacingRight, flipCallback);
         }
     }
@@ -68,7 +61,6 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
     
-    // Útil para debug visual
     private void OnDrawGizmos()
     {
         if (waypoints == null) return;

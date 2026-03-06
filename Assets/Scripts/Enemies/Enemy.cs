@@ -4,7 +4,6 @@ public class Enemy : MonoBehaviour
 {
     [HideInInspector] public bool isFacingRight = true;
 
-    // Cache da posição inicial
     protected Vector3 startPosition;
     protected bool startFacingRight;
 
@@ -22,10 +21,8 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Chamado pelo RoomManager
     public void Revive()
     {
-        // 1. Reset Físico (Posição/Rotação)
         transform.position = startPosition;
         isFacingRight = startFacingRight;
         
@@ -33,13 +30,10 @@ public class Enemy : MonoBehaviour
         scaler.x = isFacingRight ? Mathf.Abs(scaler.x) : -Mathf.Abs(scaler.x);
         transform.localScale = scaler;
 
-        // 2. Reset Lógico (Cérebro)
         ResetState();
 
-        // 3. Reativação
         gameObject.SetActive(true);
     }
 
-    // Filhos sobrescrevem isso
     protected virtual void ResetState() { }
 }

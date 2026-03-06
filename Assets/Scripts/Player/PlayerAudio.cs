@@ -12,15 +12,12 @@ public class PlayerAudio : MonoBehaviour
     [SerializeField] private AudioClip playerDeathClip;
 
     [Header("Configuração de Variação")]
-    [Tooltip("O quanto o som pode variar. 0.1 significa que o pitch vai de 0.9 a 1.1")]
     [Range(0f, 0.5f)] 
     [SerializeField] private float pitchVariation = 0.1f; 
 
-    // --- NOVO: Controle de Volume Específico ---
     [Header("Configuração de Volume")]
     [Range(0f, 1f)]
-    [SerializeField] private float deathVolume = 0.6f; // Ajuste esse valor no Inspector
-    // -------------------------------------------
+    [SerializeField] private float deathVolume = 0.6f;
 
     private void OnValidate()
     {
@@ -39,7 +36,6 @@ public class PlayerAudio : MonoBehaviour
 
     public void PlayKillConfirm()
     {
-        // Agora o kill também terá uma leve variação para ficar "orgânico"
         PlaySound(killClip, 1.2f); 
     }
     
@@ -47,12 +43,11 @@ public class PlayerAudio : MonoBehaviour
     {
         if (playerDeathClip != null && source != null)
         {
-            // Toca com prioridade máxima
-            source.pitch = 1.0f - Random.Range(0f, 0.2f); // Leve variação para baixo (mais triste/pesado)
+            source.pitch = 1.0f - Random.Range(0f, 0.2f);
             
-            // --- USO DA VARIÁVEL AQUI ---
+
             source.PlayOneShot(playerDeathClip, deathVolume);
-            // ----------------------------
+
         }
     }
 
@@ -60,10 +55,7 @@ public class PlayerAudio : MonoBehaviour
     {
         if (clip != null && source != null)
         {
-            // --- A MÁGICA ACONTECE AQUI ---
-            // Define o pitch como: 1.0 (Normal) +/- valor aleatório
             source.pitch = 1.0f + Random.Range(-pitchVariation, pitchVariation);
-            // ------------------------------
 
             source.PlayOneShot(clip, volume);
         }

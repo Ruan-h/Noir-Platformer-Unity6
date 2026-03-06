@@ -4,8 +4,8 @@ public class Checkpoint : MonoBehaviour
 {
     public enum CheckpointType
     {
-        Bench,          // O Banco físico (Recupera tudo e salva definitivo)
-        ZoneTransition  // Portal que carrega outra cena
+        Bench,         
+        ZoneTransition
     }
 
     [Header("Configuração")]
@@ -25,8 +25,6 @@ public class Checkpoint : MonoBehaviour
             switch (type)
             {
                 case CheckpointType.Bench:
-                    // Aqui você pode adicionar uma verificação de Input 
-                    // (Ex: if (Input.GetKeyDown(KeyCode.UpArrow)) para sentar)
                     
                     GameManager.instance.RestAtBench(transform.position);
                     ActivateVisuals();

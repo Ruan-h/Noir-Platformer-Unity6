@@ -23,7 +23,6 @@ public class VisionConeMesh : MonoBehaviour
 
     private void Awake()
     {
-        // Inicialização de componentes movida para o Awake para garantir que existam
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         matPropertyBlock = new MaterialPropertyBlock();
@@ -35,32 +34,26 @@ public class VisionConeMesh : MonoBehaviour
         meshFilter.mesh = mesh;
     }
 
-    // --- CORREÇÃO PRINCIPAL AQUI ---
     private void OnEnable()
     {
         if (visionSource == null) visionSource = GetComponentInParent<IEnemyVision>();
 
-        // 1. Limpa qualquer lixo visual anterior
         if (mesh != null) mesh.Clear();
-
-        // 2. FORÇA a física a atualizar o teleporte do inimigo AGORA.
-        // Se não fizer isso, o Raycast sai da posição antiga da morte.
+.
         Physics2D.SyncTransforms();
 
-        // 3. Gera a malha IMEDIATAMENTE (Frame 0 do respawn)
         GenerateConeMesh();
 
-        // 4. Inicia o loop para os próximos frames
         StartCoroutine(UpdateConeRoutine());
     }
 
     private void OnDisable()
     {
-        // Para tudo e limpa a malha quando o inimigo morre/desliga
+
         StopAllCoroutines();
         if (mesh != null) mesh.Clear();
     }
-    // -------------------------------
+
 
     private IEnumerator UpdateConeRoutine()
     {
@@ -89,7 +82,6 @@ public class VisionConeMesh : MonoBehaviour
         bool facingRight = visionSource.IsFacingRight;
         bool isAlert = visionSource.IsAlert; 
 
-        // --- Atualização de Cor ---
         Color targetColor = isAlert ? chaseColor : patrolColor;
         matPropertyBlock.SetColor("_BaseColor", targetColor);
         meshRenderer.SetPropertyBlock(matPropertyBlock);
