@@ -39,7 +39,7 @@ public class VisionConeMesh : MonoBehaviour
         if (visionSource == null) visionSource = GetComponentInParent<IEnemyVision>();
 
         if (mesh != null) mesh.Clear();
-.
+
         Physics2D.SyncTransforms();
 
         GenerateConeMesh();
